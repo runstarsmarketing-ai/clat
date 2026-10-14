@@ -5,17 +5,18 @@ A responsive, manifestation-inspired CLAT study planner built with plain HTML, C
 ## Features
 
 - Dashboard with daily completion, mock count and weekly task-based focus estimate.
-- Daily routine with a weekday selector and a rotating main subject:
-  - Monday/Thursday: Logical Reasoning
-  - Tuesday/Friday: Legal Reasoning
-  - Wednesday/Saturday: English Language
-  - Sunday: mixed practice and mock day
+- Editable daily routine with a pencil icon. Edit task names, time slots, descriptions, blocks, and add/remove tasks for each weekday.
+- Alternating default morning subject pairs:
+  - Monday/Wednesday/Friday: Legal Reasoning + English Language
+  - Tuesday/Thursday/Saturday: Logical Reasoning + Quantitative Techniques
+  - Sunday: full-length mock + analysis.
+- Quant is not scheduled as a separate daily morning task; the morning second block follows the day's subject pair.
 - Fixed study blocks: 9 AM–12 PM, 2 PM–4 PM, plus night revision.
 - Daily reading habit, Current Affairs class, GK marathon and Quant sets.
 - Sunday full-length mock and mock-analysis checklist.
 - Mock score tracker (out of 120), weakest section, attempted questions, duration and takeaways.
 - Daily intention, affirmation, reflection journal and personal “why”.
-- Progress is saved in browser `localStorage` on the device/browser being used.
+- Progress and custom routines are saved in browser `localStorage` on the device/browser being used.
 
 ## Deploy to Vercel
 

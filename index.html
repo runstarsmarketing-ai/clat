@@ -105,7 +105,7 @@
 
         <div class="dashboard-grid">
           <section class="panel today-panel">
-            <div class="panel-heading"><div><div class="section-kicker">THE PLAN</div><h3>Today's priorities</h3></div><button class="subtle-button" data-goto="routine">View routine ↗</button></div>
+            <div class="panel-heading"><div><div class="section-kicker">THE PLAN</div><h3>Today's priorities</h3></div><div class="heading-actions"><button class="edit-icon" id="editTodayBtn" title="Edit today's tasks" aria-label="Edit today's tasks">✎</button><button class="subtle-button" data-goto="routine">View routine ↗</button></div></div>
             <div class="subject-pill-row"><span class="subject-pill" id="mainSubjectPill">LOGICAL REASONING DAY</span><span class="date-small" id="shortDate"></span></div>
             <div class="task-list" id="dashboardTasks"></div>
             <button class="full-width-button" data-goto="routine">Open full checklist <span>→</span></button>
@@ -124,12 +124,12 @@
       </section>
 
       <section class="view" id="view-routine">
-        <div class="page-heading"><div class="eyebrow">YOUR DAILY SYSTEM</div><h1>A routine that <em>moves you forward.</em></h1><p>Check off what you finish. Your progress saves automatically on this device.</p></div>
+        <div class="page-heading"><div class="eyebrow">YOUR DAILY SYSTEM</div><h1>A routine that <em>moves you forward.</em></h1><p>Check off what you finish. Use the pencil to edit task names, timings, details, and your subject rotation. Changes save on this device.</p></div>
         <div class="routine-controls">
           <div class="day-selector" id="daySelector">
             <button data-day="1">MON</button><button data-day="2">TUE</button><button data-day="3">WED</button><button data-day="4">THU</button><button data-day="5">FRI</button><button data-day="6">SAT</button><button data-day="0">SUN</button>
           </div>
-          <div class="routine-progress"><span id="routineProgressText">0 / 8 complete</span><div class="progress-track"><div class="progress-fill" id="routineProgressBar"></div></div></div>
+          <div class="routine-header-actions"><div class="routine-progress"><span id="routineProgressText">0 / 8 complete</span><div class="progress-track"><div class="progress-fill" id="routineProgressBar"></div></div></div><button class="edit-icon large-edit" id="editRoutineBtn" title="Edit selected day's routine" aria-label="Edit selected day's routine">✎ <span>Edit routine</span></button></div>
         </div>
         <div class="routine-layout">
           <div class="routine-main">
@@ -208,6 +208,16 @@
         <section class="panel vision-panel"><div><div class="section-kicker">YOUR NORTH STAR</div><h3>Why this matters to me</h3><p class="muted">Write the reason you want to earn your place at your dream law university.</p></div><textarea id="northStar" rows="3" placeholder="I am working towards this because..."></textarea><button class="save-link" id="saveNorthStar">Save my why <span>↗</span></button></section>
       </section>
 
+      <div class="modal-backdrop" id="editModal" aria-hidden="true">
+        <section class="edit-modal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+          <div class="modal-heading"><div><div class="section-kicker">MAKE IT YOURS</div><h2 id="editModalTitle">Edit your routine</h2><p>Change task names, times, details, and add or remove tasks.</p></div><button class="modal-close" id="closeEditModal" aria-label="Close editor">×</button></div>
+          <form id="routineEditForm">
+            <div class="edit-day-row"><label class="input-label" for="editDay">EDIT DAY</label><select id="editDay"><option value="1">Monday</option><option value="2">Tuesday</option><option value="3">Wednesday</option><option value="4">Thursday</option><option value="5">Friday</option><option value="6">Saturday</option><option value="0">Sunday</option></select></div>
+            <div id="editableTaskList" class="editable-task-list"></div>
+            <div class="modal-actions"><button type="button" class="secondary-button" id="addTaskBtn">＋ Add task</button><div><button type="button" class="secondary-button" id="cancelEditBtn">Cancel</button><button type="submit" class="primary-button">Save changes <span>↗</span></button></div></div>
+          </form>
+        </section>
+      </div>
       <footer class="footer"><span>BRIEFLY © YOUR CLAT ERA</span><span>MADE FOR CONSISTENT PROGRESS <span class="footer-star">✦</span></span></footer>
     </main>
   </div>

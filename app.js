@@ -4,7 +4,16 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const daySubjects = {1:"Logical Reasoning",2:"Legal Reasoning",3:"English Language",4:"Logical Reasoning",5:"Legal Reasoning",6:"English Language",0:"Mixed Practice + Mock"};
+  const daySubjects = {1:"Legal + English",2:"Logical + Quant",3:"Legal + English",4:"Logical + Quant",5:"Legal + English",6:"Logical + Quant",0:"Sunday Mock + Review"};
+  const subjectPairs = {
+    1: ["Legal Reasoning", "English Language"],
+    2: ["Logical Reasoning", "Quantitative Techniques"],
+    3: ["Legal Reasoning", "English Language"],
+    4: ["Logical Reasoning", "Quantitative Techniques"],
+    5: ["Legal Reasoning", "English Language"],
+    6: ["Logical Reasoning", "Quantitative Techniques"],
+    0: ["Mixed Practice", "Mock Analysis"]
+  };
   const affirmations = [
     "I am becoming focused, disciplined, and capable of achieving my goals.",
     "I can improve through practice, honest review, and consistent effort.",
@@ -13,21 +22,34 @@
     "My future is shaped by the small, intentional actions I take today.",
     "I can face difficult questions calmly and work through them step by step."
   ];
-  const taskTemplates = [
-    {id:"main",group:"morning",time:"9:00–10:20",title:"Main subject — 3 passages",desc:"Rotate Logical, Legal and English by day."},
-    {id:"quantAM",group:"morning",time:"10:30–11:10",title:"Quant — 2 sets",desc:"Solve carefully; record calculation or concept errors."},
+  const defaultTaskTemplates = [
+    {id:"main",group:"morning",time:"9:00–10:20",title:"Main subject — 3 passages",desc:"Practise the day's assigned subject pair."},
+    {id:"second",group:"morning",time:"10:30–11:10",title:"Second subject — 2 passages / sets",desc:"Use the second subject in your rotation; Quant is not scheduled every morning."},
     {id:"ca",group:"morning",time:"11:10–12:00",title:"Current Affairs class",desc:"Make concise notes and mark important events."},
-    {id:"quantPM",group:"afternoon",time:"2:00–3:00",title:"Quant — 4 sets",desc:"Focus on concepts, accuracy and timed practice."},
+    {id:"quantPM",group:"afternoon",time:"2:00–3:00",title:"Quant — 4 sets",desc:"On Quant days, focus on accuracy and timed practice; otherwise use this block for weak topics."},
     {id:"gk",group:"afternoon",time:"3:10–4:00",title:"GK marathon",desc:"Capture key facts; revise them later from memory."},
     {id:"revision",group:"evening",time:"Night",title:"One subject revision class",desc:"Rotate subjects and revise the class afterwards."},
     {id:"reading",group:"evening",time:"30 min",title:"Book / editorial reading",desc:"Read actively; note the central argument and 3 words."},
     {id:"analysis",group:"evening",time:"15–20 min",title:"Mistake analysis + active recall",desc:"Review errors and recall today's GK without notes."}
   ];
-  const sundayTasks = [
+  const defaultSundayTasks = [
     {id:"mock",group:"sunday",time:"Morning",title:"Full-length CLAT mock",desc:"Simulate exam conditions and follow the official time limit."},
     {id:"mockAnalysis",group:"sunday",time:"After mock",title:"Detailed mock analysis",desc:"Classify errors: knowledge, comprehension, logic, calculation or time."},
     {id:"weakTopics",group:"sunday",time:"Evening",title:"Repair 2 weak topics",desc:"Revise the two highest-impact gaps revealed by the mock."}
   ];
+  function getCustomTasks(day) {
+    state.customTasks ||= {};
+    const key = String(day);
+    if (state.customTasks[key]) return state.customTasks[key];
+    const isSunday = Number(day) === 0;
+    const tasks = isSunday ? defaultSundayTasks : defaultTaskTemplates;
+    return tasks.map(task => ({...task}));
+  }
+  function saveCustomTasks(day, tasks) {
+    state.customTasks ||= {};
+    state.customTasks[String(day)] = tasks;
+    persist();
+  }
   let state = loadState();
   let selectedDay = new Date().getDay();
   let toastTimer;
@@ -68,10 +90,7 @@
     $("#greeting").textContent = hour < 12 ? "Good morning." : hour < 17 ? "Good afternoon." : "Good evening.";
   }
   function tasksForDay(day) {
-    const isSunday = Number(day) === 0;
-    return isSunday
-      ? [...taskTemplates.filter(t => t.id === "ca" || t.id === "reading"), ...sundayTasks, ...taskTemplates.filter(t => t.id === "gk" || t.id === "revision")]
-      : taskTemplates;
+    return getCustomTasks(Number(day));
   }
   function taskMarkup(task, key) {
     const checks = getDayState(key).checks || {};
@@ -93,9 +112,7 @@
   }
   function renderDashboardTasks() {
     const today = new Date().getDay();
-    const tasks = today === 0
-      ? [sundayTasks[0], sundayTasks[1], taskTemplates[0], taskTemplates[1], taskTemplates[2], taskTemplates[6]]
-      : taskTemplates;
+    const tasks = getCustomTasks(today).slice(0, 6);
     $("#mainSubjectPill").textContent = `${daySubjects[today].toUpperCase()} DAY`;
     $("#dashboardTasks").innerHTML = tasks.map(t => taskMarkup(t, dateKey())).join("");
     bindTaskInputs($("#dashboardTasks"));
@@ -103,7 +120,8 @@
   function renderRoutine() {
     $$("#daySelector button").forEach(button => button.classList.toggle("active", Number(button.dataset.day) === selectedDay));
     const key = dateKeyForWeekday(selectedDay);
-    const dayTasks = tasksForDay(selectedDay);
+    const dayTasks = getCustomTasks(selectedDay);
+    $("#topSection").textContent = "DAILY ROUTINE";
     const groups = {morning:[],afternoon:[],evening:[],sunday:[]};
     dayTasks.forEach(task => (groups[task.group] || groups.evening).push(task));
     $("#morningTasks").innerHTML = groups.morning.map(t=>taskMarkup(t,key)).join("");
@@ -115,7 +133,7 @@
     bindTaskInputs($("#view-routine"));
     const checks = getDayState(key).checks || {};
     const completed = dayTasks.filter(t => checks[t.id]).length;
-    const percent = Math.round(completed / dayTasks.length * 100);
+    const percent = Math.round(completed / Math.max(dayTasks.length, 1) * 100);
     $("#routineProgressText").textContent = `${completed} / ${dayTasks.length} complete`;
     $("#routineProgressBar").style.width = `${percent}%`;
   }
@@ -197,6 +215,79 @@
     $("#countMinutes").textContent = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
     $("#countSeconds").textContent = String(seconds % 60).padStart(2, "0");
   }
+  function openEditModal(day = selectedDay) {
+    selectedDay = Number(day);
+    $("#editDay").value = String(selectedDay);
+    renderEditableTasks();
+    $("#editModal").classList.add("open");
+    $("#editModal").setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+  function closeEditModal() {
+    $("#editModal").classList.remove("open");
+    $("#editModal").setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+  function renderEditableTasks() {
+    const day = Number($("#editDay").value);
+    const tasks = getCustomTasks(day);
+    $("#editableTaskList").innerHTML = tasks.map((task, index) => `
+      <div class="editable-task-row" data-edit-row="${index}">
+        <div class="field"><label class="input-label">TASK NAME</label><input data-field="title" value="${escapeHTML(task.title)}" required></div>
+        <div class="field"><label class="input-label">TIME</label><input data-field="time" value="${escapeHTML(task.time)}" placeholder="e.g. 9:00–10:00"></div>
+        <div class="field"><label class="input-label">BLOCK</label><select data-field="group">
+          <option value="morning" ${task.group==="morning"?"selected":""}>Morning</option>
+          <option value="afternoon" ${task.group==="afternoon"?"selected":""}>Afternoon</option>
+          <option value="evening" ${task.group==="evening"?"selected":""}>Night</option>
+          <option value="sunday" ${task.group==="sunday"?"selected":""}>Sunday mock</option>
+        </select></div>
+        <button type="button" class="remove-task" title="Remove task" aria-label="Remove task">×</button>
+        <div class="field edit-task-desc"><label class="input-label">DESCRIPTION / NOTES</label><textarea data-field="desc" rows="2">${escapeHTML(task.desc || "")}</textarea></div>
+      </div>`).join("");
+    $$(".remove-task", $("#editableTaskList")).forEach(button => button.addEventListener("click", () => {
+      button.closest(".editable-task-row").remove();
+    }));
+  }
+  function collectEditableTasks() {
+    return $$(".editable-task-row", $("#editableTaskList")).map((row, index) => {
+      const get = field => $(`[data-field="${field}"]`, row).value.trim();
+      return {id:`custom-${index}-${Date.now()}`, title:get("title"), time:get("time"), group:get("group"), desc:get("desc")};
+    }).filter(task => task.title);
+  }
+  $("#editRoutineBtn").addEventListener("click", () => openEditModal(selectedDay));
+  $("#editTodayBtn").addEventListener("click", () => openEditModal(new Date().getDay()));
+  $("#editDay").addEventListener("change", () => renderEditableTasks());
+  $("#addTaskBtn").addEventListener("click", () => {
+    const rows = collectEditableTasks();
+    rows.push({id:`custom-new-${Date.now()}`, group:Number($("#editDay").value)===0?"sunday":"morning", time:"", title:"New task", desc:"Add task details here."});
+    $("#editableTaskList").innerHTML = rows.map((task, index) => `
+      <div class="editable-task-row" data-edit-row="${index}">
+        <div class="field"><label class="input-label">TASK NAME</label><input data-field="title" value="${escapeHTML(task.title)}" required></div>
+        <div class="field"><label class="input-label">TIME</label><input data-field="time" value="${escapeHTML(task.time)}" placeholder="e.g. 9:00–10:00"></div>
+        <div class="field"><label class="input-label">BLOCK</label><select data-field="group">
+          <option value="morning" ${task.group==="morning"?"selected":""}>Morning</option><option value="afternoon" ${task.group==="afternoon"?"selected":""}>Afternoon</option><option value="evening" ${task.group==="evening"?"selected":""}>Night</option><option value="sunday" ${task.group==="sunday"?"selected":""}>Sunday mock</option>
+        </select></div>
+        <button type="button" class="remove-task" title="Remove task" aria-label="Remove task">×</button>
+        <div class="field edit-task-desc"><label class="input-label">DESCRIPTION / NOTES</label><textarea data-field="desc" rows="2">${escapeHTML(task.desc || "")}</textarea></div>
+      </div>`).join("");
+    $$(".remove-task", $("#editableTaskList")).forEach(button => button.addEventListener("click", () => button.closest(".editable-task-row").remove()));
+  });
+  $("#routineEditForm").addEventListener("submit", event => {
+    event.preventDefault();
+    const day = Number($("#editDay").value);
+    const tasks = collectEditableTasks();
+    if (!tasks.length) { showToast("Add at least one task before saving."); return; }
+    saveCustomTasks(day, tasks);
+    selectedDay = day;
+    closeEditModal();
+    renderAll();
+    showToast("Routine saved. Your changes are kept on this device.");
+  });
+  $("#closeEditModal").addEventListener("click", closeEditModal);
+  $("#cancelEditBtn").addEventListener("click", closeEditModal);
+  $("#editModal").addEventListener("click", event => { if (event.target === $("#editModal")) closeEditModal(); });
+  document.addEventListener("keydown", event => { if (event.key === "Escape") closeEditModal(); });
+
   function renderAll() {
     updateDateLabels();
     updateCountdown();

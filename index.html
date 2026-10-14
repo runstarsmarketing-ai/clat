@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f3ed" />
+  <meta name="description" content="Your personal CLAT study planner, daily checklist, mock tracker, and manifestation dashboard." />
+  <title>Briefly — CLAT Study Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="Briefly home">
+        <span class="brand-mark">b.</span><span><strong>briefly</strong><small>YOUR CLAT ERA</small></span>
+      </a>
+      <div class="sidebar-label">YOUR SPACE</div>
+      <nav class="nav">
+        <button class="nav-item active" data-view="dashboard"><span>✳</span> Overview</button>
+        <button class="nav-item" data-view="routine"><span>◷</span> Daily routine</button>
+        <button class="nav-item" data-view="mock"><span>↗</span> Mock tracker</button>
+        <button class="nav-item" data-view="journal"><span>✎</span> Reflection journal</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="mini-quote">“Small steps, repeated daily, become extraordinary results.”</div>
+        <div class="sidebar-date" id="sidebarDate"></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-mark">b.</span><strong>briefly</strong></div>
+        <div class="breadcrumb">STUDY STUDIO <span>/</span> <b id="topSection">OVERVIEW</b></div>
+        <div class="top-actions">
+          <span class="live-dot"></span><span class="today-label" id="todayLabel">TODAY</span>
+          <button class="icon-button" id="resetDayBtn" title="Reset today's checklist" aria-label="Reset today's checklist">↻</button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-dashboard">
+        <div class="hero">
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="sparkle">✦</span> YOUR FUTURE IS BUILT TODAY</div>
+            <h1>Become the person<br/>who <em>gets there.</em></h1>
+            <p class="hero-subtitle">One focused day at a time. Your NLU Jodhpur journey starts with what you do next.</p>
+            <div class="hero-actions">
+              <button class="primary-button" id="startDayBtn">Start today's plan <span>↗</span></button>
+              <button class="text-button" data-goto="journal">Write a reflection <span>→</span></button>
+            </div>
+          </div>
+          <div class="hero-art">
+            <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+            <div class="sun-disc"><span>✦</span></div>
+            <div class="art-card art-card-top"><span class="art-icon">☼</span><span>SHOW UP<br/><b>EVERY DAY</b></span></div>
+            <div class="art-card art-card-bottom"><span class="tiny-check">✓</span><span>Future advocate<br/><b>in the making</b></span></div>
+            <div class="art-caption">INTENTION → ACTION → GROWTH</div>
+          </div>
+        </div>
+
+        <div class="date-row">
+          <div><div class="section-kicker">YOUR DASHBOARD</div><h2 id="greeting">Good morning.</h2><p class="muted">Keep your promises to yourself today.</p></div>
+          <div class="week-chip"><span class="week-chip-dot"></span><span id="dayName">WEEKLY RESET</span></div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card progress-stat">
+            <div class="stat-top"><span>DAILY COMPLETION</span><span class="stat-icon">◔</span></div>
+            <div class="stat-value"><span id="completionPercent">0</span><small>%</small></div>
+            <div class="progress-track"><div class="progress-fill" id="completionBar"></div></div>
+            <div class="stat-foot"><span id="completionCount">0 of 8 tasks complete</span><span>Keep going</span></div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>MOCKS COMPLETED</span><span class="stat-icon">↗</span></div>
+            <div class="stat-value"><span id="mockCount">0</span></div>
+            <div class="stat-foot"><span>Full-length practice tests</span><span class="accent-text">Consistency wins</span></div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>YOUR FOCUS</span><span class="stat-icon">✦</span></div>
+            <div class="stat-value"><span id="focusHours">0</span><small> hrs</small></div>
+            <div class="stat-foot"><span>Study time logged this week</span><span class="accent-text">One day at a time</span></div>
+          </article>
+        </div>
+
+        <section class="countdown-panel" aria-label="CLAT exam countdown">
+          <div class="countdown-copy">
+            <div class="section-kicker">THE DATE THAT DRIVES YOU</div>
+            <h3>CLAT 2027 is getting closer.</h3>
+            <p>6 December 2026 · Keep showing up for the future you're building.</p>
+          </div>
+          <div class="countdown-units">
+            <div class="countdown-unit"><strong id="countDays">—</strong><span>DAYS</span></div>
+            <div class="countdown-separator">:</div>
+            <div class="countdown-unit"><strong id="countHours">—</strong><span>HOURS</span></div>
+            <div class="countdown-separator">:</div>
+            <div class="countdown-unit"><strong id="countMinutes">—</strong><span>MINUTES</span></div>
+            <div class="countdown-separator">:</div>
+            <div class="countdown-unit"><strong id="countSeconds">—</strong><span>SECONDS</span></div>
+          </div>
+          <div class="countdown-bottom"><span class="countdown-star">✦</span><span>Less counting. More becoming.</span><span class="countdown-date">06 / 12 / 2026</span></div>
+        </section>
+
+        <div class="dashboard-grid">
+          <section class="panel today-panel">
+            <div class="panel-heading"><div><div class="section-kicker">THE PLAN</div><h3>Today's priorities</h3></div><button class="subtle-button" data-goto="routine">View routine ↗</button></div>
+            <div class="subject-pill-row"><span class="subject-pill" id="mainSubjectPill">LOGICAL REASONING DAY</span><span class="date-small" id="shortDate"></span></div>
+            <div class="task-list" id="dashboardTasks"></div>
+            <button class="full-width-button" data-goto="routine">Open full checklist <span>→</span></button>
+          </section>
+          <section class="panel intention-panel">
+            <div class="panel-heading"><div><div class="section-kicker">SET YOUR INTENTION</div><h3>Today's affirmation</h3></div><span class="quote-mark">“</span></div>
+            <p class="affirmation" id="affirmationText">I am becoming focused, disciplined, and capable of achieving my goals.</p>
+            <div class="affirmation-footer"><span>READ IT. BELIEVE IT. ACT ON IT.</span><button id="newAffirmation" class="round-arrow" aria-label="New affirmation">↻</button></div>
+            <div class="intention-divider"></div>
+            <label for="dailyIntention" class="input-label">MY ONE NON-NEGOTIABLE TODAY</label>
+            <textarea id="dailyIntention" rows="2" placeholder="e.g. Analyse every mistake instead of rushing..."></textarea>
+            <button class="save-link" id="saveIntention">Save intention <span>↗</span></button>
+          </section>
+        </div>
+        <div class="bottom-note"><span>✦</span><p><b>Remember:</b> Your goal is not to have a perfect day. Your goal is to return to the plan, even when the day gets difficult.</p></div>
+      </section>
+
+      <section class="view" id="view-routine">
+        <div class="page-heading"><div class="eyebrow">YOUR DAILY SYSTEM</div><h1>A routine that <em>moves you forward.</em></h1><p>Check off what you finish. Your progress saves automatically on this device.</p></div>
+        <div class="routine-controls">
+          <div class="day-selector" id="daySelector">
+            <button data-day="1">MON</button><button data-day="2">TUE</button><button data-day="3">WED</button><button data-day="4">THU</button><button data-day="5">FRI</button><button data-day="6">SAT</button><button data-day="0">SUN</button>
+          </div>
+          <div class="routine-progress"><span id="routineProgressText">0 / 8 complete</span><div class="progress-track"><div class="progress-fill" id="routineProgressBar"></div></div></div>
+        </div>
+        <div class="routine-layout">
+          <div class="routine-main">
+            <div class="timeline-group">
+              <div class="timeline-label"><span class="timeline-icon morning">☼</span><div><h3>Morning focus</h3><p>9:00 AM — 12:00 PM</p></div></div>
+              <div class="routine-card" id="morningTasks"></div>
+            </div>
+            <div class="timeline-group">
+              <div class="timeline-label"><span class="timeline-icon afternoon">☀</span><div><h3>Afternoon deep work</h3><p>2:00 PM — 4:00 PM</p></div></div>
+              <div class="routine-card" id="afternoonTasks"></div>
+            </div>
+            <div class="timeline-group">
+              <div class="timeline-label"><span class="timeline-icon evening">☾</span><div><h3>Evening & wind-down</h3><p>Your final learning block</p></div></div>
+              <div class="routine-card" id="eveningTasks"></div>
+            </div>
+            <div class="timeline-group sunday-only" id="sundayMockBlock">
+              <div class="timeline-label"><span class="timeline-icon sunday">↗</span><div><h3>Sunday mock day</h3><p>Test, analyse, improve</p></div></div>
+              <div class="routine-card" id="sundayTasks"></div>
+            </div>
+          </div>
+          <aside class="routine-aside">
+            <div class="side-note-card"><span class="side-note-icon">✦</span><h3>Make it count.</h3><p>Accuracy before speed. Review why an answer was wrong, then practise until the pattern becomes clear.</p></div>
+            <div class="side-note-card book-note"><span class="book-illustration">▤</span><h3>30-minute reading ritual</h3><p>Read an editorial or a few pages of a vocabulary book. Note the main argument and 3 useful words.</p><div class="book-tags"><span>READ</span><span>REFLECT</span><span>REPEAT</span></div></div>
+            <div class="side-note-card"><h3>Quick notes</h3><textarea id="routineNotes" rows="4" placeholder="Things to remember, doubts, topics to revisit..."></textarea><button class="save-link" id="saveRoutineNotes">Save notes <span>↗</span></button></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="view-mock">
+        <div class="page-heading"><div class="eyebrow">MEASURE YOUR GROWTH</div><h1>Every mock is <em>data, not judgement.</em></h1><p>Use Sunday for a full-length mock, then review it carefully. Track your scores and weak sections here.</p></div>
+        <div class="mock-summary-grid">
+          <div class="mock-summary"><span>MOCKS LOGGED</span><strong id="mockTotalLarge">0</strong><small>Build consistency</small></div>
+          <div class="mock-summary"><span>BEST SCORE</span><strong id="bestScore">—</strong><small>Out of 120</small></div>
+          <div class="mock-summary"><span>LATEST SCORE</span><strong id="latestScore">—</strong><small>Keep improving</small></div>
+        </div>
+        <div class="mock-layout">
+          <section class="panel mock-form-panel">
+            <div class="panel-heading"><div><div class="section-kicker">NEW ENTRY</div><h3>Log a mock test</h3></div><span class="form-number">01</span></div>
+            <form id="mockForm">
+              <label class="input-label" for="mockName">MOCK / SOURCE NAME</label><input id="mockName" required placeholder="e.g. CLAT Mock 01" />
+              <div class="form-two"><div><label class="input-label" for="mockDate">DATE</label><input id="mockDate" type="date" required /></div><div><label class="input-label" for="mockScore">SCORE / 120</label><input id="mockScore" type="number" min="0" max="120" step="0.25" required placeholder="e.g. 82.5" /></div></div>
+              <div class="form-two"><div><label class="input-label" for="mockAttempted">ATTEMPTED</label><input id="mockAttempted" type="number" min="0" max="120" placeholder="Questions attempted" /></div><div><label class="input-label" for="mockDuration">DURATION (MIN)</label><input id="mockDuration" type="number" min="1" max="300" value="120" /></div></div>
+              <label class="input-label" for="mockWeak">WEAKEST SECTION</label>
+              <select id="mockWeak"><option value="Not identified">Not identified yet</option><option>English Language</option><option>Current Affairs & GK</option><option>Legal Reasoning</option><option>Logical Reasoning</option><option>Quantitative Techniques</option></select>
+              <label class="input-label" for="mockReview">ANALYSIS / TAKEAWAYS</label><textarea id="mockReview" rows="4" placeholder="What went well? Which mistakes repeated? What will you change next time?"></textarea>
+              <button class="primary-button submit-button" type="submit">Save mock result <span>↗</span></button>
+            </form>
+          </section>
+          <section class="panel mock-history-panel">
+            <div class="panel-heading"><div><div class="section-kicker">YOUR PROGRESS</div><h3>Mock history</h3></div><span class="history-badge">LATEST FIRST</span></div>
+            <div id="mockHistory" class="mock-history"><div class="empty-state"><span>↗</span><h4>Your first mock starts here.</h4><p>Log a test to see your progress over time.</p></div></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" id="view-journal">
+        <div class="page-heading"><div class="eyebrow">PAUSE. NOTICE. GROW.</div><h1>Build your future <em>from the inside out.</em></h1><p>A manifestation space grounded in action. Set an intention, acknowledge progress, and choose your next step.</p></div>
+        <div class="journal-grid">
+          <section class="journal-poster">
+            <div class="poster-top">THE PERSON I'M BECOMING</div><div class="poster-star">✳</div>
+            <h2>Focused mind.<br/><em>Steady effort.</em><br/>Meaningful future.</h2>
+            <p>I don't need to do everything today. I need to do the next right thing, with intention.</p>
+            <div class="poster-bottom"><span>CLARITY</span><span>DISCIPLINE</span><span>COURAGE</span></div>
+          </section>
+          <section class="panel journal-form-panel">
+            <div class="panel-heading"><div><div class="section-kicker">DAILY REFLECTION</div><h3>Check in with yourself</h3></div><span class="quote-mark">“</span></div>
+            <form id="journalForm">
+              <label class="input-label" for="journalWin">ONE WIN FROM TODAY</label><textarea id="journalWin" rows="2" placeholder="What did you do well, even if it was small?"></textarea>
+              <label class="input-label" for="journalLearn">WHAT I LEARNED</label><textarea id="journalLearn" rows="2" placeholder="A concept, a mistake, or something about yourself..."></textarea>
+              <label class="input-label" for="journalNext">MY NEXT RIGHT STEP</label><textarea id="journalNext" rows="2" placeholder="One clear action for tomorrow..."></textarea>
+              <button class="primary-button submit-button" type="submit">Save today's reflection <span>↗</span></button>
+            </form>
+            <div id="journalSaved" class="saved-message" aria-live="polite"></div>
+          </section>
+        </div>
+        <section class="panel vision-panel"><div><div class="section-kicker">YOUR NORTH STAR</div><h3>Why this matters to me</h3><p class="muted">Write the reason you want to earn your place at your dream law university.</p></div><textarea id="northStar" rows="3" placeholder="I am working towards this because..."></textarea><button class="save-link" id="saveNorthStar">Save my why <span>↗</span></button></section>
+      </section>
+
+      <footer class="footer"><span>BRIEFLY © YOUR CLAT ERA</span><span>MADE FOR CONSISTENT PROGRESS <span class="footer-star">✦</span></span></footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
